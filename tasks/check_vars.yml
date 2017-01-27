@@ -1,0 +1,4 @@
+# Check for Required Variables
+- fail:
+    msg: "Define the license_file_path variable"
+  when: license_file_path == ''

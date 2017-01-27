@@ -1,0 +1,6 @@
+---
+- name: tower
+  hosts: localhost
+  roles:
+    - role: tower
+      license_file_path: license.json

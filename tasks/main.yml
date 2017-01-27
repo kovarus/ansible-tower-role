@@ -1,0 +1,44 @@
+---
+# tasks file for tower
+- name: Include Variable Checking
+  include: check_vars.yml
+- name: Get Tower Install File
+  unarchive:
+    src: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
+    dest: /tmp
+    remote_src: True
+- name: Set Passwords for Setup
+  template:
+    src: inventory.j2
+    dest: /tmp/inventory
+    mode: 0600
+- name: Run Tower Install Script
+  become: true
+  shell: ./setup.sh -i /tmp/inventory
+  args:
+    chdir: /tmp/ansible-tower-setup-{{ tower_version }}/
+    creates: /etc/tower
+- name: Upload Tower License
+  uri:
+    url: https://127.0.0.1/api/v1/config/
+    method: POST
+    body_format: json
+    body: "{{ lookup('file','{{ license_file_path }}') }}"
+    validate_certs: no
+    user: admin
+    password: "{{ admin_password }}"
+- name: Install Pip
+  become: true
+  yum:
+    name: python-pip
+- name: Install tower-cli
+  become: true
+  pip:
+    name: ansible-tower-cli
+  when: install_cli == True
+- name: Configure tower-cli
+  become: true
+  shell: tower-cli config --global host 127.0.0.1 && tower-cli config --global username admin && tower-cli config --global password {{ admin_password }}
+  args:
+    creates: /etc/tower/tower_cli.cfg
+  when: install_cli == True

@@ -1,0 +1,28 @@
+$script = <<SCRIPT
+#!/bin/bash
+
+yum clean all
+yum makecache
+sudo yum install -y epel-release
+sudo yum install -y ansible
+ln -s /vagrant ~/tower
+export ANSIBLE_ROLES_PATH=~
+ansible-playbook /vagrant/tests/test.yml
+SCRIPT
+
+Vagrant.configure(2) do |config|
+  config.vm.define "tower" do |tower|
+    tower.vm.provider :virtualbox do |vb|
+      vb.gui = false
+      vb.memory = '2048'
+      vb.cpus = '1'
+    end
+    tower.vm.synced_folder ".", "/vagrant", disabled: true
+    tower.vm.synced_folder "../.", "/vagrant"
+    tower.vm.box = "boxcutter/centos73"
+    tower.vm.hostname = "tower"
+    tower.vm.provision :hosts, :sync_hosts => true
+    tower.vm.provision "shell",
+      inline: $script
+  end
+end
