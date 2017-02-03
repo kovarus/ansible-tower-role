@@ -8,5 +8,3 @@ redis_password: password
 postgres_password: password
 
 install_cli: true
-
-license_file_path: ""
