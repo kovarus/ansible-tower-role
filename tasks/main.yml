@@ -1,7 +1,5 @@
 ---
 # tasks file for tower
-- name: Include Variable Checking
-  include: check_vars.yml
 - name: Get Tower Install File
   unarchive:
     src: http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
