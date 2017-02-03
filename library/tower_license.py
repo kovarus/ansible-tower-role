@@ -26,7 +26,10 @@ def main():
     tower_config = get_config(module, tower_config_url)
     tower_license = tower_config['license_info']
 
-    upload = compare_license(user_license, tower_license)
+    if not tower_license:
+        upload = 1
+    else:
+        upload = compare_license(user_license, tower_license)
 
     if upload:
         upload_status = upload_license(module, user_license, tower_config_url)
