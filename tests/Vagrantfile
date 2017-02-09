@@ -5,6 +5,7 @@ yum clean all
 yum makecache
 sudo yum install -y epel-release
 sudo yum install -y ansible
+sudo ifup eth1
 ln -s /vagrant ~/tower
 export ANSIBLE_ROLES_PATH=~
 ansible-playbook /vagrant/tests/test.yml
@@ -21,6 +22,7 @@ Vagrant.configure(2) do |config|
     tower.vm.synced_folder "../.", "/vagrant"
     tower.vm.box = "boxcutter/centos73"
     tower.vm.hostname = "tower"
+    tower.vm.network :private_network, ip: '192.168.98.110'
     tower.vm.provision "shell",
       inline: $script
   end
