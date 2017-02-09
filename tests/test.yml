@@ -1,13 +1,13 @@
 ---
-- name: Test Module
+- name: Tower Module Test
   hosts: localhost
   roles:
     - tower
   tasks:
-    - name: upload license
-      tower_license:
+    - name: Configure Tower
+      tower_config:
         host: 127.0.0.1
+        validate_certs: false
         tower_user: admin
         tower_password: password
-        license: /vagrant/ansible_files/tower_license.json
-        validate_certs: false
+        license: /vagrant/ansible_files/license.json
