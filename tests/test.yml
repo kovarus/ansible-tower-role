@@ -10,4 +10,4 @@
         validate_certs: false
         tower_user: admin
         tower_password: password
-        license: /vagrant/ansible_files/license.json
+        license: /vagrant/tests/license.json
